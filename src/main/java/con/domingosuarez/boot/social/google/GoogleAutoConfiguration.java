@@ -14,7 +14,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
@@ -27,6 +26,7 @@ import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.web.servlet.View;
 
 import static java.util.Optional.ofNullable;
+import static org.springframework.context.annotation.ScopedProxyMode.INTERFACES;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for Spring Social connectivity with
@@ -52,10 +52,7 @@ public class GoogleAutoConfiguration {
     private GoogleProperties properties;
 
     @Override
-    public void addConnectionFactories(ConnectionFactoryConfigurer configurer,
-                                       Environment environment) {
-      System.out.println("Google AppID: " + properties.getAppId());
-      System.out.println("Google App Secret: " + properties.getAppSecret());
+    public void addConnectionFactories(ConnectionFactoryConfigurer configurer, Environment environment) {
       configurer.addConnectionFactory(new GoogleConnectionFactory(
         this.properties.getAppId(),
         this.properties.getAppSecret()));
@@ -63,7 +60,7 @@ public class GoogleAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(Google.class)
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
+    @Scope(value = "request", proxyMode = INTERFACES)
     public Google google(ConnectionRepository repository) {
       return ofNullable(repository.findPrimaryConnection(Google.class))
         .map(c -> c.getApi())
