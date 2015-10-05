@@ -91,6 +91,8 @@ license {
   strictCheck true
 }
 
+def githubRepoName ='social-google-spring-boot-starter'
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
@@ -104,13 +106,13 @@ publishing {
         def root = asNode()
         root.appendNode('name', project.name)
         root.appendNode('description', project.description)
-        root.appendNode('url', 'https://github.com/domix/spring-boot-health-indicators')
+        root.appendNode('url', "https://github.com/domix/${githubRepoName}")
         root.appendNode('inceptionYear', '2015')
 
         def scm = root.appendNode('scm')
-        scm.appendNode('url', 'https://github.com/domix/spring-boot-health-indicators')
-        scm.appendNode('connection', 'scm:https://domix@github.com/domix/spring-boot-health-indicators.git')
-        scm.appendNode('developerConnection', 'scm:git@github.com:domix/spring-boot-health-indicators.git')
+        scm.appendNode('url', "https://github.com/domix/${githubRepoName}")
+        scm.appendNode('connection', "scm:https://domix@github.com/domix/${githubRepoName}.git")
+        scm.appendNode('developerConnection', "scm:git@github.com:domix/${githubRepoName}.git")
 
         def license = root.appendNode('licenses').appendNode('license')
         license.appendNode('name', 'The Apache Software License, Version 2.0')
@@ -139,11 +141,11 @@ bintray {
     userOrg = 'domix'
     name = project.name
     desc = project.description
-    websiteUrl = 'https://github.com/domix/spring-boot-health-indicators'
-    issueTrackerUrl = 'https://github.com/domix/spring-boot-health-indicators/issues'
-    vcsUrl = 'https://github.com/domix/spring-boot-health-indicators.git'
+    websiteUrl = "https://github.com/domix/${githubRepoName}"
+    issueTrackerUrl = "https://github.com/domix/${githubRepoName}/issues"
+    vcsUrl = "https://github.com/domix/${githubRepoName}.git"
     licenses = ['Apache-2.0']
-    labels = ['spring', 'spring-boot', 'actuator', 'health-indicator', 'rabbit', 'rabbitmq', 'hystrix']
+    labels = ['spring', 'spring-boot', 'spring-social', 'google', 'oauth2', 'spring-social-google', 'spring-boot-starter']
     publicDownloadNumbers = true
     attributes = [:]
     //Optional version descriptor
