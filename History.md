@@ -1,5 +1,5 @@
 
-0.1.0 / 2015-10-05
+1.0.0.M1 / 2015-10-05
 ==================
 
- * some changes
+ * initial implementation
