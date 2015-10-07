@@ -98,12 +98,24 @@ publishing {
     mavenJava(MavenPublication) {
       from components.java
 
-      it.pom.getRuntimeDependencies().clear()
+      def lombok = it.pom.getRuntimeDependencies().find {
+        it.artifactId == 'lombok'
+      }
+
+      if (lombok) {
+        it.pom.getRuntimeDependencies().remove(lombok)
+      }
 
       artifact sourcesJar
 
       pom.withXml {
         def root = asNode()
+
+        def parentNode = asNode().appendNode('parent')
+        parentNode.appendNode('groupId','org.springframework.boot')
+        parentNode.appendNode('artifactId','spring-boot-starter-parent')
+        parentNode.appendNode('version',springBootVersion)
+
         root.appendNode('name', project.name)
         root.appendNode('description', project.description)
         root.appendNode('url', "https://github.com/domix/${githubRepoName}")
@@ -124,7 +136,17 @@ publishing {
         domix.appendNode('id', 'domix')
         domix.appendNode('name', 'Domingo Suarez Torres')
         domix.appendNode('email', 'domingo.suarez@gmail.com')
+
+        root.dependencies.'*'.findAll() {
+          it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+            dep.name == it.artifactId.text()
+          }
+        }.each() {
+          it.scope*.value = 'compile'
+        }
       }
+
+
     }
   }
 }
